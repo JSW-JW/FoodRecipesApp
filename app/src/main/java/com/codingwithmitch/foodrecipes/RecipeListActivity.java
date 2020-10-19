@@ -5,11 +5,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviderKt;
+
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.codingwithmitch.foodrecipes.requests.RecipeApi;
 import com.codingwithmitch.foodrecipes.requests.ServiceGenerator;
 import com.codingwithmitch.foodrecipes.requests.responses.RecipeSearchResponse;
 import com.codingwithmitch.foodrecipes.utils.Constants;
+import com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,15 +29,23 @@ public class RecipeListActivity extends BaseActivity {
 
     private static final String TAG = "RecipeListActivity";
 
+    private RecipeListViewModel mRecipeListViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
+        mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
+
+        subscribeObservers();
+    }
+
+    private void subscribeObservers(){
+        mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
-            public void onClick(View view) {
-                testRetrofitRequest();
+            public void onChanged(List<Recipe> recipes) {
+
             }
         });
     }
