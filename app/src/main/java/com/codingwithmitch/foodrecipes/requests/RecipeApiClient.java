@@ -43,7 +43,7 @@ public class RecipeApiClient {
     }
 
     public void searchRecipesApi(String query, int pageNumber) {
-        if(mRetrieveRecipesRunnable != null) {
+        if (mRetrieveRecipesRunnable != null) {
             mRetrieveRecipesRunnable = null;    // reset the variable if it already has been assigned.
         }
         mRetrieveRecipesRunnable = new RetrieveRecipesRunnable(query, pageNumber);
@@ -73,21 +73,20 @@ public class RecipeApiClient {
         @Override
         public void run() {
             try {
-                Response response = getRecipes(query, pageNumber).execute();
+                Response response = getRecipes(query, pageNumber).execute();  // work on background thread for the network stuffs.
                 if (cancelRequest) {
                     return;
                 }
-                if(response.code() == 200) {
-                    List<Recipe> list = new ArrayList<Recipe>(((RecipeSearchResponse)response.body()).getRecipes());
-                    if(pageNumber == 1) {
+                if (response.code() == 200) {
+                    List<Recipe> list = new ArrayList<Recipe>(((RecipeSearchResponse) response.body()).getRecipes());
+                    if (pageNumber == 1) {
                         mRecipes.postValue(list);
-                    }else {
+                    } else {
                         List<Recipe> currentList = mRecipes.getValue();
                         currentList.addAll(list);
                         mRecipes.postValue(currentList);
                     }
-                }
-                else {
+                } else {
                     String error = response.errorBody().string();
                     Log.e(TAG, "run: " + error);
                     mRecipes.postValue(null);
