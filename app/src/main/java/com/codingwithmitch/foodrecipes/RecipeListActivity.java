@@ -1,6 +1,8 @@
 package com.codingwithmitch.foodrecipes;
 
 import android.os.Bundle;
+import android.widget.SearchView;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codingwithmitch.foodrecipes.adapters.OnRecipeListener;
 import com.codingwithmitch.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.codingwithmitch.foodrecipes.models.Recipe;
+import com.codingwithmitch.foodrecipes.utils.HorizontalDottedProgress;
 import com.codingwithmitch.foodrecipes.utils.Testing;
 import com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel;
 import java.util.List;
@@ -19,7 +22,6 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView mRecyclerView;
     private RecipeRecyclerAdapter mAdapter;
-    private List<Recipe> mRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
         mRecyclerView = findViewById(R.id.recipe_list);
 
-
         subscribeObservers();
         initRecyclerView();
-        testRetrofitRequest();
+        initSearchView();
     }
 
     private void initRecyclerView(){
@@ -44,20 +45,29 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
-                if(recipes != null) {
+                /*if(recipes != null) {
                     Testing.printRecipes(recipes, TAG);
                     mAdapter.setRecipes(recipes);
-                }
+                }*/
+
             }
         });
     }
 
-    private void searchRecipesApi(String query, int pageNumber){
-        mRecipeListViewModel.searchRecipesApi(query, pageNumber);
-    }
+    private void initSearchView(){
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mRecipeListViewModel.searchRecipesApi(s, 1);
+                return false;
+            }
 
-    private void testRetrofitRequest() {
-        searchRecipesApi("chicken", 1);
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @Override
