@@ -45,10 +45,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
-                /*if(recipes != null) {
+                if(recipes != null) {
                     Testing.printRecipes(recipes, TAG);
                     mAdapter.setRecipes(recipes);
-                }*/
+                }
 
             }
         });
@@ -59,6 +59,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
+                mAdapter.displayLoading();
                 mRecipeListViewModel.searchRecipesApi(s, 1);
                 return false;
             }
