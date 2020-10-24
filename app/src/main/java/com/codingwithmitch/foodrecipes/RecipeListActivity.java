@@ -46,6 +46,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             // display search categories
             displaySearchCategories();
         }
+        // setSupportActionBar because it is using custom toolbar not default actionbar.
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
 
