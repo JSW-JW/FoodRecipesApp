@@ -7,12 +7,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.codingwithmitch.foodrecipes.adapters.OnRecipeListener;
 import com.codingwithmitch.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.codingwithmitch.foodrecipes.utils.Testing;
 import com.codingwithmitch.foodrecipes.utils.VerticalSpacingItemDecorator;
 import com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel;
+
 import java.util.List;
 
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
@@ -34,32 +36,35 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         subscribeObservers();
         initRecyclerView();
         initSearchView();
-        if(!mRecipeListViewModel.isViewingRecipes()) {
+        if (!mRecipeListViewModel.isViewingRecipes()) {
             // display search categories
             displaySearchCategories();
         }
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         mAdapter = new RecipeRecyclerAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new VerticalSpacingItemDecorator(30));
     }
-    private void subscribeObservers(){
+
+    private void subscribeObservers() {
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
-                if(recipes != null) {
-                    Testing.printRecipes(recipes, TAG);
-                    mAdapter.setRecipes(recipes);
+                if (recipes != null) {
+                    if(mRecipeListViewModel.isViewingRecipes()) {
+                        Testing.printRecipes(recipes, TAG);
+                        mAdapter.setRecipes(recipes);
+                    }
                 }
 
             }
         });
     }
 
-    private void initSearchView(){
+    private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -88,8 +93,19 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel.searchRecipesApi(category, 1);
     }
 
-    private void displaySearchCategories(){
+    private void displaySearchCategories() {
         mRecipeListViewModel.setIsViewingRecipes(false);
         mAdapter.displaySearchCategories();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mRecipeListViewModel.onBackPressed()) {
+            super.onBackPressed();
+        } else {
+            displaySearchCategories();
+        }
+    }
+
+
 }
