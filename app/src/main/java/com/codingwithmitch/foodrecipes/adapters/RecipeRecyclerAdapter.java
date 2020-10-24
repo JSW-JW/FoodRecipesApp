@@ -34,10 +34,10 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = null;
 
-        switch (i) { // i is the view type constant
+        switch (viewType) { // i is the view type constant
             case RECIPE_TYPE:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, mOnRecipeListener);
@@ -100,6 +100,11 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return CATEGORY_TYPE;
         }
         else if(mRecipes.get(position).getTitle().equals("LOADING...")){
+            return LOADING_TYPE;
+        }
+        else if(position == mRecipes.size() - 1
+                && position != 0
+                && !mRecipes.get(position).getTitle().equals("EXHAUSTED...")){
             return LOADING_TYPE;
         }
         else{
