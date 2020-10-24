@@ -64,8 +64,8 @@ public class RecipeActivity extends BaseActivity {
             @Override
             public void onChanged(Recipe recipe) {
                 if(recipe != null) {
-                    if(recipe.getRecipe_id().equals(mRecipeViewModel.getRecipeId())) {
-                        setRecipeProperties(recipe);
+                    if(recipe.getRecipe_id().equals(mRecipeViewModel.getRecipeId())) { // not executed as long as old recipeId not match with new Id.
+                        setRecipeProperties(recipe);                                    // executed after a new recipe is retrieved and Ids match.
                     }
                 }
             }
