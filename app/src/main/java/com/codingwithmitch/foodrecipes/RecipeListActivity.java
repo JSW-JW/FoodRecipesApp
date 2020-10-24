@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codingwithmitch.foodrecipes.adapters.OnRecipeListener;
 import com.codingwithmitch.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.codingwithmitch.foodrecipes.models.Recipe;
-import com.codingwithmitch.foodrecipes.utils.HorizontalDottedProgress;
 import com.codingwithmitch.foodrecipes.utils.Testing;
+import com.codingwithmitch.foodrecipes.utils.VerticalSpacingItemDecorator;
 import com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel;
 import java.util.List;
 
@@ -44,6 +44,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mAdapter = new RecipeRecyclerAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new VerticalSpacingItemDecorator(30));
     }
     private void subscribeObservers(){
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
