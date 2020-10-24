@@ -128,6 +128,19 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    public void displaySearchCategories(){
+        List<Recipe> categories = new ArrayList<>();
+        for(int i = 0; i < Constants.DEFAULT_SEARCH_CATEGORIES.length; i++){
+            Recipe recipe = new Recipe();
+            recipe.setTitle(Constants.DEFAULT_SEARCH_CATEGORIES[i]);
+            recipe.setImage_url(Constants.DEFAULT_SEARCH_CATEGORY_IMAGES[i]);
+            recipe.setSocial_rank(-1);
+            categories.add(recipe);
+        }
+        mRecipes = categories;
+        notifyDataSetChanged();
+    }
+
     private boolean isLoading(){
         if(mRecipes.size() > 0){
             if(mRecipes.get(mRecipes.size() - 1).getTitle().equals("LOADING...")){
@@ -142,16 +155,13 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         notifyDataSetChanged();
     }
 
-    public void displaySearchCategories(){
-        List<Recipe> categories = new ArrayList<>();
-        for(int i = 0; i < Constants.DEFAULT_SEARCH_CATEGORIES.length; i++){
-            Recipe recipe = new Recipe();
-            recipe.setTitle(Constants.DEFAULT_SEARCH_CATEGORIES[i]);
-            recipe.setImage_url(Constants.DEFAULT_SEARCH_CATEGORY_IMAGES[i]);
-            recipe.setSocial_rank(-1);
-            categories.add(recipe);
+    public Recipe getSelectedRecipe(int position){
+        if(mRecipes != null) {
+            if(mRecipes.size() > 0) {
+                return mRecipes.get(position);
+            }
         }
-        mRecipes = categories;
-        notifyDataSetChanged();
+        return null;
     }
+
 }
