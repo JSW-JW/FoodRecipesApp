@@ -65,7 +65,6 @@ public class RecipeApiClient {
             @Override
             public void run() {
                 // let the user know it's timed out.
-                mRecipeRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, Constants.NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -78,10 +77,12 @@ public class RecipeApiClient {
         mRetrieveRecipeRunnable = new RetrieveRecipeRunnable(recipeId);
         final Future handler = AppExecutors.getInstance().NetworkIO().submit(mRetrieveRecipeRunnable);
 
+        mRecipeRequestTimeout.setValue(false);
         AppExecutors.getInstance().NetworkIO().schedule(new Runnable() {
             @Override
             public void run() {
                 // let the user know it's timed out.
+                mRecipeRequestTimeout.postValue(true);
                 handler.cancel(true); // it's going to interrupt the runnable if it's still running after 3 sec.
             }
         }, Constants.NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);

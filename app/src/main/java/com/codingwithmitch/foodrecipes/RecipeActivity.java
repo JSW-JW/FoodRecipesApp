@@ -65,8 +65,9 @@ public class RecipeActivity extends BaseActivity {
             public void onChanged(Recipe recipe) {
                 if(recipe != null) {
                     if(recipe.getRecipe_id().equals(mRecipeViewModel.getRecipeId())) { // not executed as long as old recipeId not match with new Id.
-                        setRecipeProperties(recipe);                                   // executed after a new recipe is retrieved and Ids match.
                         mRecipeViewModel.setRetrievedRecipe(true);
+                        setRecipeProperties(recipe);                                   // executed after a new recipe is retrieved and Ids match.
+                        Log.d(TAG, "onChanged1: " + mRecipeViewModel.didRetrieveRecipe());
                     }
                 }
             }
@@ -74,13 +75,17 @@ public class RecipeActivity extends BaseActivity {
 
         mRecipeViewModel.isRecipeRequestTimedOut().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean && !mRecipeViewModel.didRetrieveRecipe()) {
-                    Log.d(TAG, "onChanged: timed out..");
+            public void onChanged(Boolean isRequestTimedOut) {
+                    Log.d(TAG, "onChanged2: " + mRecipeViewModel.didRetrieveRecipe());
+                    Log.d(TAG, "onChanged3: " + isRequestTimedOut);
+                if(isRequestTimedOut && !mRecipeViewModel.didRetrieveRecipe()) {
+                    Log.d(TAG, "onChanged4: timed out..");
                 }
             }
         });
     }
+
+    
 
     private void setRecipeProperties(Recipe recipe){
         if(recipe != null) {
