@@ -1,6 +1,7 @@
 package com.codingwithmitch.foodrecipes.viewmodels;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.codingwithmitch.foodrecipes.models.Recipe;
@@ -10,6 +11,7 @@ public class RecipeViewModel extends ViewModel {
 
     private RecipeRepository mRecipeRepository;
     private String mRecipeId;
+    private boolean mDidRetrieveRecipe;
 
     public RecipeViewModel() {
         mRecipeRepository = RecipeRepository.getInstance();
@@ -17,6 +19,10 @@ public class RecipeViewModel extends ViewModel {
 
     public LiveData<Recipe> getRecipe(){
         return mRecipeRepository.getRecipe();
+    }
+
+    public MutableLiveData<Boolean> isRecipeRequestTimedOut() {
+        return mRecipeRepository.isRecipeRequestTimedOut();
     }
 
     public void searchRecipeById(String recipeId) {
@@ -27,4 +33,13 @@ public class RecipeViewModel extends ViewModel {
     public String getRecipeId() {
         return mRecipeId;
     }
+
+    public void setRetrievedRecipe(boolean didRetrieveRecipe) {
+        mDidRetrieveRecipe = didRetrieveRecipe;
+    }
+
+    public boolean didRetrieveRecipe(){
+        return mDidRetrieveRecipe;
+    }
+
 }

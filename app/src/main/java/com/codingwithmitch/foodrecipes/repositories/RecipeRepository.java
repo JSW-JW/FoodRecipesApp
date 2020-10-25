@@ -34,6 +34,10 @@ public class RecipeRepository {
         return mRecipeApiClient.getRecipe();
     }
 
+    public MutableLiveData<Boolean> isRecipeRequestTimedOut() {
+        return mRecipeApiClient.isRecipeRequestTimedOut();
+    }
+
     public void searchRecipesApi(String query, int pageNumber){
         if(pageNumber == 0) {
             pageNumber = 1;

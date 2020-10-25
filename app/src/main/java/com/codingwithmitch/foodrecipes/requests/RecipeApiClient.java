@@ -2,7 +2,6 @@ package com.codingwithmitch.foodrecipes.requests;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.codingwithmitch.foodrecipes.AppExecutors;
@@ -29,6 +28,7 @@ public class RecipeApiClient {
     private RetrieveRecipesRunnable mRetrieveRecipesRunnable;
     private RetrieveRecipeRunnable mRetrieveRecipeRunnable;
     private MutableLiveData<Recipe> mRecipe;
+    private MutableLiveData<Boolean> mRecipeRequestTimeout = new MutableLiveData<>();
 
     public static RecipeApiClient getInstance() {
         if (instance == null) {
@@ -50,6 +50,10 @@ public class RecipeApiClient {
         return mRecipe;
     }
 
+    public MutableLiveData<Boolean> isRecipeRequestTimedOut() {
+        return mRecipeRequestTimeout;
+    }
+
     public void searchRecipesApi(String query, int pageNumber) {
         if (mRetrieveRecipesRunnable != null) {
             mRetrieveRecipesRunnable = null;    // reset the variable if it already has been assigned.
@@ -61,6 +65,7 @@ public class RecipeApiClient {
             @Override
             public void run() {
                 // let the user know it's timed out.
+                mRecipeRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, Constants.NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
