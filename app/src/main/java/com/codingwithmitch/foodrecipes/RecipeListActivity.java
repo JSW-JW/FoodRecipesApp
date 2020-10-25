@@ -2,6 +2,7 @@ package com.codingwithmitch.foodrecipes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -74,6 +75,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             @Override
             public void onChanged(List<Recipe> recipes) {
                 if (recipes != null) {
+                    Log.d(TAG, "onChanged: RecipeList");
                     if (mRecipeListViewModel.isViewingRecipes()) {
                         Testing.printRecipes(recipes, TAG);
                         mRecipeListViewModel.setIsPerformingQuery(false);
@@ -81,6 +83,15 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                     }
                 }
 
+            }
+        });
+
+        mRecipeListViewModel.isQueryExhausted().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isQueryExhausted) {
+                    Log.d(TAG, "onChanged: the query is exhausted...");
+                if(isQueryExhausted) {
+                }
             }
         });
     }
