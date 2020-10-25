@@ -63,7 +63,7 @@ public class RecipeRepository {
     }
 
     public MutableLiveData<List<Recipe>> getRecipes() {
-        return mRecipeApiClient.getRecipes();
+        return mRecipes;
     }
 
     public MutableLiveData<Recipe> getRecipe() {
