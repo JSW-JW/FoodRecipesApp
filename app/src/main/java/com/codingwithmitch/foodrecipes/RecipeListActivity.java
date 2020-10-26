@@ -75,8 +75,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             @Override
             public void onChanged(List<Recipe> recipes) {
                 if (recipes != null) {
-                    Log.d(TAG, "onChanged: RecipeList");
                     if (mRecipeListViewModel.isViewingRecipes()) {
+                        Log.d(TAG, "onChanged: RecipeList");
                         Testing.printRecipes(recipes, TAG);
                         mRecipeListViewModel.setIsPerformingQuery(false);
                         mAdapter.setRecipes(recipes);
@@ -89,8 +89,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel.isQueryExhausted().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isQueryExhausted) {
-                    Log.d(TAG, "onChanged: the query is exhausted...");
                 if(isQueryExhausted) {
+                    Log.d(TAG, "onChanged: the query is exhausted...");
                 }
             }
         });
